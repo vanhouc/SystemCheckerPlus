@@ -38,6 +38,14 @@ namespace SystemCheckerPlus
             get { return _appFolder; }
             set { _appFolder = value; }
         }
+
+        private int _appVersion;
+
+        public int AppVersion
+        {
+            get { return _appVersion; }
+            set { _appVersion = value; }
+        }
         
         public VersusApplication()
         {
