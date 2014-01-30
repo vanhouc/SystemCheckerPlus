@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Xml.Linq;
 namespace SystemCheckerPlus
 {
     class XMLService
     {
-        private string _xmlSource;
-
+        private XDocument doc;
         public XMLService(string xmlSource)
         {
             if (File.Exists(xmlSource))
             {
-                _xmlSource = xmlSource;
+                doc = XDocument.Load(xmlSource);
             }
             else
             {
