@@ -53,6 +53,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="IXDocProvider.cs" />
+    <Compile Include="VersusAppController.cs" />
     <Compile Include="VersusApplication.cs" />
     <Compile Include="XMLLoader.cs" />
     <Compile Include="XMLService.cs" />
