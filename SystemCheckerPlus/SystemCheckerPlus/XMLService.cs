@@ -21,7 +21,7 @@ namespace SystemCheckerPlus
             {
                 scope = scope.Single(x => x.Name == elementChain[i]).Descendants();
             }
-            return scope.Single(x => x.Name == elementChain[elementChain.Length]).Value;
+            return scope.Single(x => x.Name == elementChain[elementChain.Length - 1]).Value;
         }
     }
 }
