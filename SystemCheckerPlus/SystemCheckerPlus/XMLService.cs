@@ -6,19 +6,22 @@ using System.IO;
 using System.Xml.Linq;
 namespace SystemCheckerPlus
 {
-    class XMLService
+    public class XMLService
     {
-        private XDocument doc;
-        public XMLService(string xmlSource)
+        private XDocument _doc;
+        public XMLService(IXDocProvider loader)
         {
-            if (File.Exists(xmlSource))
+            if (loader.Doc != null)
+                _doc = loader.Doc;
+        }
+        public string GetElementValue(string[] elementChain)
+        {
+            IEnumerable<XElement> scope = _doc.Descendants();
+            for (int i = 0; i < elementChain.Length - 1; i++ )
             {
-                doc = XDocument.Load(xmlSource);
+                scope = scope.Single(x => x.Name == elementChain[i]).Descendants();
             }
-            else
-            {
-                throw new FileNotFoundException(String.Format("Could not find file: {0}", xmlSource));
-            }
+            return scope.Single(x => x.Name == elementChain[elementChain.Length]).Value;
         }
     }
 }
