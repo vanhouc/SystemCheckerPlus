@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SystemCheckerPlus
 {
-    class VersusApplication
+    public class VersusApplication
     {
         private string _displayName;
 
@@ -53,6 +53,11 @@ namespace SystemCheckerPlus
             VDataName = null;
             BUPFiles = null;
             AppFolder = null;
+        }
+        public VersusApplication(string displayName)
+            : this()
+        {
+            DisplayName = displayName;
         }
     }
 }
