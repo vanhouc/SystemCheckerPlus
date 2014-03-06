@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SystemCheckerPlus
 {
-    interface IProcessInfo
+    public interface IProcessInfo
     {
-        public float TotalCPUUsage();
+        Task<float> TotalCPUAsync();
 
-        public float ProcessCPUUsage(string processName);
+        Task<float> ProcessCPUAsync(string processName);
 
-        public float ProcessPrivateMemory(string processName);
+        float ProcessPrivateMemory(string processName);
     }
 }
