@@ -11,17 +11,17 @@ namespace SystemCheckerPlus
 {
     public class ProcessService : IProcessInfo
     {
-        private float _cpuUsage;
+        private static readonly ProcessService instance = new ProcessService();
 
-        public float CPUUSAGE
+        private ProcessService() { }
+
+        public static ProcessService Instance
         {
-            get { return _cpuUsage; }
-            set
+            get
             {
-                _cpuUsage = value;
+                return instance;
             }
         }
-
         async public Task<float> TotalCPUAsync()
         {
             PerformanceCounter cpuCounter = new PerformanceCounter();
