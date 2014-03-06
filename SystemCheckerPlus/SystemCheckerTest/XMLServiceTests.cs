@@ -14,6 +14,12 @@ namespace SystemCheckerTest
             XMLService elementTester = new XMLService(new MockXML());
             Assert.AreEqual("Bar is maximum", elementTester.GetElementValue(new string[] { "Applications", "Foo", "FooBar" }));
         }
+        [TestMethod]
+        public void GetChildValues()
+        {
+            XMLService elementTester = new XMLService(new MockXML2());
+            CollectionAssert.AreEquivalent(new string[] {"Bar is maximum", "Bar is minimum"}, elementTester.GetChildValues(new string[] { "Applications", "Foo" }, "FooBar"));
+        }
     }
     public class MockXML : IXDocProvider
     {
@@ -24,6 +30,28 @@ namespace SystemCheckerTest
                 new XElement("Applications",
                     new XElement("Foo",
                         new XElement("FooBar", "Bar is maximum")
+                        )
+                    )
+                );
+        }
+        public XDocument Doc
+        {
+            get
+            {
+                return _doc;
+            }
+        }
+    }
+    public class MockXML2 : IXDocProvider
+    {
+        private XDocument _doc;
+        public MockXML2()
+        {
+            _doc = new XDocument(
+                new XElement("Applications",
+                    new XElement("Foo",
+                        new XElement("FooBar", "Bar is maximum"),
+                        new XElement("FooBar", "Bar is minimum")
                         )
                     )
                 );
