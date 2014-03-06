@@ -23,5 +23,14 @@ namespace SystemCheckerPlus
             }
             return scope.Single(x => x.Name == elementChain[elementChain.Length - 1]).Value;
         }
+        public string[] GetChildValues(string[] elementChain, string childProperty)
+        {
+                        IEnumerable<XElement> scope = _doc.Descendants();
+            for (int i = 0; i < elementChain.Length - 1; i++ )
+            {
+                scope = scope.Single(x => x.Name == elementChain[i]).Descendants();
+            }
+            return scope.Elements(childProperty).Select(x => x.Value).ToArray();
+        }
     }
 }
