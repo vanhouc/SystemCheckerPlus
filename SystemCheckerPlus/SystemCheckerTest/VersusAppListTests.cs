@@ -14,23 +14,23 @@ namespace SystemCheckerTest
         [TestMethod]
         public void ConstructorEmptyArray()
         {
-            VersusApplication[] testArray = new VersusApplication[0];
-            VersusAppList testController = new VersusAppList(testArray);
+            Application[] testArray = new Application[0];
+            AppService testController = new AppService(testArray);
             CollectionAssert.AreEqual(new string[] { "No Applications Present" }, testController.GetAllProp("DisplayName"));
         }
         [TestMethod]
         public void GetAllPropDN()
         {
-            VersusApplication[] testArray = { new VersusApplication(), new VersusApplication("Just Checking"), new VersusApplication() };
-            VersusAppList testController = new VersusAppList(testArray);
+            Application[] testArray = { new Application(), new Application("Just Checking"), new Application() };
+            AppService testController = new AppService(testArray);
             CollectionAssert.AreEqual(new string[] { "Test Application", "Just Checking", "Test Application" }, testController.GetAllProp("DisplayName"));
         }
         [TestMethod]
         public void GetElement()
         {
-            VersusApplication[] testArray = { new VersusApplication(), new VersusApplication("Just Checking"), new VersusApplication() };
-            VersusAppList testController = new VersusAppList(testArray);
-            Assert.AreEqual(testArray[1], testController.GetElement(typeof(VersusApplication), "DisplayName", "Just Checking")[0]);
+            Application[] testArray = { new Application(), new Application("Just Checking"), new Application() };
+            AppService testController = new AppService(testArray);
+            Assert.AreEqual(testArray[1], testController.GetElement(typeof(Application), "DisplayName", "Just Checking")[0]);
         }
     }
 }
