@@ -32,6 +32,11 @@ namespace SystemCheckerPlus
             await Task.Delay(1000);
             return cpuCounter.NextValue();
         }
+        public float AvailableMemory()
+        {
+            PerformanceCounter memCounter = new PerformanceCounter("Memory", "Available MBytes");
+            return memCounter.NextValue();
+        }
 
         async public Task<float> ProcessCPUAsync(string processName)
         {
