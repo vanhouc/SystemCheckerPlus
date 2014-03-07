@@ -20,6 +20,15 @@ namespace SystemCheckerTest
             XMLService elementTester = new XMLService(new MockXML2());
             CollectionAssert.AreEquivalent(new string[] {"Bar is maximum", "Bar is minimum"}, elementTester.GetChildValues(new string[] { "Applications", "Foo" }, "FooBar"));
         }
+        [TestMethod]
+        public void GetAppData()
+        {
+            XMLService elementTester = new XMLService(new MockXML3());
+            Application testApp = elementTester.GetAppData(new string[] { "Applications", "Application" })[0];
+            Assert.IsTrue(testApp.DisplayName == "Name");
+            Assert.IsTrue(testApp.AppFolder == "Bar is minimum");
+            CollectionAssert.AreEquivalent(new string[] { "\\stuff" }, testApp.BUPFiles);
+        }
     }
     public class MockXML : IXDocProvider
     {
@@ -52,6 +61,31 @@ namespace SystemCheckerTest
                     new XElement("Foo",
                         new XElement("FooBar", "Bar is maximum"),
                         new XElement("FooBar", "Bar is minimum")
+                        )
+                    )
+                );
+        }
+        public XDocument Doc
+        {
+            get
+            {
+                return _doc;
+            }
+        }
+    }
+    public class MockXML3 : IXDocProvider
+    {
+        private XDocument _doc;
+        public MockXML3()
+        {
+            _doc = new XDocument(
+                new XElement("Applications",
+                    new XElement("Application",
+                        new XElement("DisplayName", "Name"),
+                        new XElement("Folder", "Bar is minimum"),
+                        new XElement("BUPFiles",
+                            new XElement("file", "\\stuff")),
+                        new XElement("Executable", "Name.exe")
                         )
                     )
                 );
