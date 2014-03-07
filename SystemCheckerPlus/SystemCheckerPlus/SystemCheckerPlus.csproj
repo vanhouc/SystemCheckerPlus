@@ -55,6 +55,7 @@
     </ApplicationDefinition>
     <Compile Include="IProcessInfo.cs" />
     <Compile Include="IXDocProvider.cs" />
+    <Compile Include="IXMLService.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="ProcessService.cs" />
