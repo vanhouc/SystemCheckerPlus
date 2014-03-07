@@ -6,26 +6,17 @@ using System.Reflection;
 
 namespace SystemCheckerPlus
 {
-    public class AppService
+    public static class AppService
     {
-        private Application[] _appList;
-
-        public AppService(Application[] appList)
-        {
-            if (appList.Length < 1)
-                _appList = new Application[] { new Application("No Applications Present") };
-            else
-            _appList = appList;
-        }
-        public string[] GetAllProp(string propertyName)
+        public static string[] GetAllProp(Application[] appList, string propertyName)
         {
             PropertyInfo objProp = typeof(Application).GetProperty(propertyName);
-            return _appList.Select(x => objProp.GetValue(x, null) as string).ToArray();
+            return appList.Select(x => objProp.GetValue(x, null) as string).ToArray();
         }
-        public Application[] GetElement(Type objType, string refProp, string refValue)
+        public static Application[] GetElement(Application[] appList, Type objType, string refProp, string refValue)
         {
             PropertyInfo objProp = typeof(Application).GetProperty(refProp);
-            return _appList.Where(x => (string)objProp.GetValue(x, null) == refValue).ToArray();
+            return appList.Where(x => (string)objProp.GetValue(x, null) == refValue).ToArray();
         }
     }
 }
