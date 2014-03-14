@@ -1,21 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Linq;
 using System.IO;
+using System.Xml.Linq;
 
 namespace SystemCheckerPlus
 {
-    class XMLLoader : IXDocProvider
+    internal class XMLLoader : IXDocProvider
     {
         private XDocument _doc;
 
-        public XDocument Doc
-        {
-            get { return _doc; }
-            set { _doc = value; }
-        }
         public XMLLoader(string filePath)
         {
             if (File.Exists(filePath) && new FileInfo(filePath).Extension == ".xml")
@@ -33,6 +25,12 @@ namespace SystemCheckerPlus
             {
                 throw new FileNotFoundException(String.Format("Could not find file: {0}", filePath));
             }
+        }
+
+        public XDocument Doc
+        {
+            get { return _doc; }
+            set { _doc = value; }
         }
     }
 }

@@ -8,29 +8,29 @@
     </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Menu>
             <MenuItem Header="File">
-                <MenuItem Header="New App Definition File"/>
-                <MenuItem Header="Open App Definition File"/>
+                <MenuItem Header="New App Definition File" />
+                <MenuItem Header="Open App Definition File" />
             </MenuItem>
         </Menu>
         <StackPanel Grid.Row="1">
-            <TextBlock Text="SystemChecker+" HorizontalAlignment="Center" FontSize="24"/>
+            <TextBlock Text="SystemChecker+" HorizontalAlignment="Center" FontSize="24" />
             <DataGrid ItemsSource="{Binding Path=Applications}" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Process Name" Binding="{Binding Path=DisplayName}" Width="*"/>
-                    <DataGridTextColumn Header="Usage(%)" Binding="{Binding Path=ProcUsage, StringFormat='#.##\\%'}" Width="Auto"/>
-                    <DataGridTextColumn Header="Memory Usage" Binding="{Binding Path=MemUsage, StringFormat='#.##MB'}" Width="Auto"/>
+                    <DataGridTextColumn Header="Process Name" Binding="{Binding Path=DisplayName}" Width="*" />
+                    <DataGridTextColumn Header="Usage(%)" Binding="{Binding Path=ProcUsage, StringFormat='#.##\\%'}" Width="Auto" />
+                    <DataGridTextColumn Header="Memory Usage" Binding="{Binding Path=MemUsage, StringFormat='#.##MB'}" Width="Auto" />
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
-        <TabControl Grid.Column="1" Grid.RowSpan="2" ItemsSource="{Binding Path=AppDefFiles}"/>
+        <TabControl Grid.Column="1" Grid.RowSpan="2" ItemsSource="{Binding Path=AppDefFiles}" />
     </Grid>
 </Window>

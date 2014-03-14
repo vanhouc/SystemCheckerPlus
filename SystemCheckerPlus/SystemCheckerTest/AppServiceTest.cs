@@ -1,10 +1,5 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SystemCheckerPlus;
-using System.Diagnostics;
 
 namespace SystemCheckerTest
 {
@@ -17,6 +12,7 @@ namespace SystemCheckerTest
             Application[] testArray = { new Application(), new Application("Just Checking"), new Application() };
             CollectionAssert.AreEqual(new string[] { "Test Application", "Just Checking", "Test Application" }, AppService.GetAllProp(testArray, "DisplayName"));
         }
+
         [TestMethod]
         public void GetElement()
         {

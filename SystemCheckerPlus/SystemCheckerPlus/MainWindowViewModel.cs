@@ -1,32 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Win32;
-using System.IO;
-using System.Threading.Tasks;
-using System.Threading;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Threading;
 
 namespace SystemCheckerPlus
 {
     public class MainWindowViewModel : ObservableObject
     {
+        private ObservableCollection<Application> _applications = new ObservableCollection<Application>();
         private float cpuUsage;
 
-        public float CPUUsage
-        {
-            get { return cpuUsage; }
-            set
-            {
-                cpuUsage = value;
-                RaisePropertyChanged("CPUUsage");
-            }
-        }
+        private Timer perfCounter;
 
-        IXMLService xmlService;
-        Timer perfCounter;
-        private ObservableCollection<Application> _applications = new ObservableCollection<Application>();
+        private IXMLService xmlService;
+
+        public MainWindowViewModel()
+        {
+            perfCounter = new Timer(UpdatePerfCounters, null, 0, 1000);
+            Applications.Add(new Application
+            {
+                DisplayName = "Total CPU Usage",
+                ProcName = "Total CPU Usage"
+            });
+        }
 
         public ObservableCollection<Application> Applications
         {
@@ -38,15 +35,24 @@ namespace SystemCheckerPlus
             }
         }
 
-        public MainWindowViewModel()
+        public float CPUUsage
         {
-            perfCounter = new Timer(UpdatePerfCounters, null, 0, 1000);
-            Applications.Add(new Application
+            get { return cpuUsage; }
+            set
             {
-                DisplayName = "Total CPU Usage",
-                ProcName = "Total CPU Usage"
-            });
+                cpuUsage = value;
+                RaisePropertyChanged("CPUUsage");
+            }
         }
+
+        public void InitializeAppData(IXMLService service)
+        {
+            if (service != null)
+            {
+                Applications = new ObservableCollection<Application>(service.GetAppData(new string[] { "Applications", "Application" }));
+            }
+        }
+
         public void LoadAppData()
         {
             OpenFileDialog openVData = new OpenFileDialog();
@@ -58,13 +64,7 @@ namespace SystemCheckerPlus
                 InitializeAppData(xmlService);
             }
         }
-        public void InitializeAppData(IXMLService service)
-        {
-            if (service != null)
-            {
-                Applications = new ObservableCollection<Application>(service.GetAppData(new string[] { "Applications", "Application" }));
-            }
-        }
+
         async private void UpdatePerfCounters(object state)
         {
             ProcessService procService = ProcessService.Instance;

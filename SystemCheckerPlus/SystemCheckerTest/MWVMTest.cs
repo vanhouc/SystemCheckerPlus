@@ -1,10 +1,6 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SystemCheckerPlus;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
-using Moq;
-using System.Diagnostics;
-using System.Linq;
+using SystemCheckerPlus;
 
 namespace SystemCheckerTest
 {

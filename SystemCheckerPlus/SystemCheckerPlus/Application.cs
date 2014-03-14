@@ -1,77 +1,121 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 
 namespace SystemCheckerPlus
 {
     public class Application : ObservableObject
     {
+        private XDocument _appDefFile;
+        private List<XDocument> _appDefFiles;
+        private string _appFolder;
+        private int _appVersion;
+        private string[] _bupFiles;
         private string _displayName;
 
-        public string DisplayName
-        {
-            get { return _displayName; }
-            set 
-            {
-                _displayName = value;
-                RaisePropertyChanged("DisplayName");
-            }
-        }
+        private float _memUsage = 0;
+
+        private Queue<float> _procUsage = new Queue<float>();
 
         private string procName;
 
-        public string ProcName
+        public Application()
         {
-            get { return procName; }
-            set 
+            DisplayName = "Test Application";
+            ProcName = null;
+            BUPFiles = null;
+            AppFolder = null;
+        }
+
+        public Application(string displayName)
+            : this()
+        {
+            DisplayName = displayName;
+        }
+
+        public XDocument AppDefFile
+        {
+            get { return _appDefFile; }
+            set
             {
-                procName = value;
-                RaisePropertyChanged("ProcName");
+                _appDefFile = value;
+                RaisePropertyChanged("AppDefFile");
             }
         }
 
-        private string[] _bupFiles;
-
-        public string[] BUPFiles
+        public List<XDocument> AppDefFiles
         {
-            get { return _bupFiles; }
-            set 
+            get { return _appDefFiles; }
+            set
             {
-                _bupFiles = value;
-                RaisePropertyChanged("BUPFiles");
+                _appDefFiles = value;
+                RaisePropertyChanged("AppDefFiles");
             }
         }
-
-        private string _appFolder;
 
         public string AppFolder
         {
             get { return _appFolder; }
-            set 
+            set
             {
                 _appFolder = value;
                 RaisePropertyChanged("AppFolder");
             }
         }
 
-        private int _appVersion;
-
         public int AppVersion
         {
             get { return _appVersion; }
-            set 
+            set
             {
                 _appVersion = value;
                 RaisePropertyChanged("AppVersion");
             }
         }
-        private Queue<float> _procUsage = new Queue<float>();
+
+        public string[] BUPFiles
+        {
+            get { return _bupFiles; }
+            set
+            {
+                _bupFiles = value;
+                RaisePropertyChanged("BUPFiles");
+            }
+        }
+
+        public string DisplayName
+        {
+            get { return _displayName; }
+            set
+            {
+                _displayName = value;
+                RaisePropertyChanged("DisplayName");
+            }
+        }
+
+        public float MemUsage
+        {
+            get { return _memUsage; }
+            set
+            {
+                _memUsage = value;
+                RaisePropertyChanged("MemUsage");
+            }
+        }
+
+        public string ProcName
+        {
+            get { return procName; }
+            set
+            {
+                procName = value;
+                RaisePropertyChanged("ProcName");
+            }
+        }
 
         public float ProcUsage
         {
-            get 
+            get
             {
                 if (_procUsage.Count != 0)
                     return _procUsage.Average();
@@ -85,56 +129,6 @@ namespace SystemCheckerPlus
                 _procUsage.Enqueue(value);
                 RaisePropertyChanged("ProcUsage");
             }
-        }
-
-        private float _memUsage = 0;
-
-        public float MemUsage
-        {
-            get { return _memUsage; }
-            set 
-            {
-                _memUsage = value;
-                RaisePropertyChanged("MemUsage");
-            }
-        }
-        private List<XDocument> _appDefFiles;
-
-        public List<XDocument> AppDefFiles
-        {
-            get { return _appDefFiles; }
-            set 
-            {
-                _appDefFiles = value;
-                RaisePropertyChanged("AppDefFiles");
-            }
-        }
-
-        private XDocument _appDefFile;
-
-        public XDocument AppDefFile
-        {
-            get { return _appDefFile; }
-            set 
-            {
-                _appDefFile = value;
-                RaisePropertyChanged("AppDefFile");
-            }
-        }
-        
-        
-
-        public Application()
-        {
-            DisplayName = "Test Application";
-            ProcName = null;
-            BUPFiles = null;
-            AppFolder = null;
-        }
-        public Application(string displayName)
-            : this()
-        {
-            DisplayName = displayName;
         }
     }
 }
