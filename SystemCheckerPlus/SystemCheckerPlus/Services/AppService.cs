@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using SystemCheckerPlus.Models;
 
-namespace SystemCheckerPlus
+namespace SystemCheckerPlus.Services
 {
     public static class AppService
     {

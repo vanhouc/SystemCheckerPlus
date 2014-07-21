@@ -1,8 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using SystemCheckerPlus.Services.Interfaces;
 
-namespace SystemCheckerPlus
+namespace SystemCheckerPlus.Services
 {
     public class ProcessService : IProcessInfo
     {

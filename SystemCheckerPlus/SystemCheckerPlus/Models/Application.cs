@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace SystemCheckerPlus
+namespace SystemCheckerPlus.Models
 {
     public class Application : ObservableObject
     {
@@ -31,26 +32,6 @@ namespace SystemCheckerPlus
             : this()
         {
             DisplayName = displayName;
-        }
-
-        public XDocument AppDefFile
-        {
-            get { return _appDefFile; }
-            set
-            {
-                _appDefFile = value;
-                RaisePropertyChanged("AppDefFile");
-            }
-        }
-
-        public List<XDocument> AppDefFiles
-        {
-            get { return _appDefFiles; }
-            set
-            {
-                _appDefFiles = value;
-                RaisePropertyChanged("AppDefFiles");
-            }
         }
 
         public string AppFolder
@@ -117,7 +98,7 @@ namespace SystemCheckerPlus
         {
             get
             {
-                if (_procUsage.Count != 0)
+                if (_procUsage.Count < 1)
                     return _procUsage.Average();
                 else
                     return 0;

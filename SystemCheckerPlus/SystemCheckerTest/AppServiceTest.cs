@@ -1,5 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SystemCheckerPlus;
+using SystemCheckerPlus.Models;
+using SystemCheckerPlus.Services;
 
 namespace SystemCheckerTest
 {

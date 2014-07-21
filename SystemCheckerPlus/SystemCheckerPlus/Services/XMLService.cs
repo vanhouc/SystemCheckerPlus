@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using SystemCheckerPlus.Models;
+using SystemCheckerPlus.Services.Interfaces;
 
-namespace SystemCheckerPlus
+namespace SystemCheckerPlus.Services
 {
-    public class XMLService : SystemCheckerPlus.IXMLService
+    public class XMLService : IXMLService
     {
         private XDocument doc;
         private IXDocProvider provider;

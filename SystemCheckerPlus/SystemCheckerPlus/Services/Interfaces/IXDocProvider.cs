@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace SystemCheckerPlus
+namespace SystemCheckerPlus.Services.Interfaces
 {
     public interface IXDocProvider
     {

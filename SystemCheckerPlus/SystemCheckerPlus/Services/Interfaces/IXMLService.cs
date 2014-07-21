@@ -1,4 +1,5 @@
-﻿namespace SystemCheckerPlus
+﻿using SystemCheckerPlus.Models;
+namespace SystemCheckerPlus.Services.Interfaces
 {
     public interface IXMLService
     {

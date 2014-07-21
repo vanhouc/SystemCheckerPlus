@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
 using SystemCheckerPlus;
+using SystemCheckerPlus.ViewModel;
 
 namespace SystemCheckerTest
 {
@@ -10,7 +11,7 @@ namespace SystemCheckerTest
         [TestMethod]
         public void PerfTimer()
         {
-            MainWindowViewModel testMWVM = new MainWindowViewModel();
+            MainViewModel testMWVM = new MainViewModel();
             Thread.Sleep(2000);
             float sample1 = testMWVM.CPUUsage;
             Assert.IsTrue(testMWVM.CPUUsage != 0);

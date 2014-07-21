@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace SystemCheckerPlus
+namespace SystemCheckerPlus.Services.Interfaces
 {
     public interface IProcessInfo
     {

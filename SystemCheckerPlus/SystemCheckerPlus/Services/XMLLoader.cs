@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Xml.Linq;
+using SystemCheckerPlus.Services.Interfaces;
 
-namespace SystemCheckerPlus
+namespace SystemCheckerPlus.Services
 {
     internal class XMLLoader : IXDocProvider
     {

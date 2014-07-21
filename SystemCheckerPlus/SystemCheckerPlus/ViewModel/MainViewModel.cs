@@ -1,21 +1,26 @@
-﻿using Microsoft.Win32;
+﻿using GalaSoft.MvvmLight;
+using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading;
+using SystemCheckerPlus.Models;
+using SystemCheckerPlus.Services;
+using SystemCheckerPlus.Services.Interfaces;
 
 namespace SystemCheckerPlus
 {
-    public class MainWindowViewModel : ObservableObject
+    public class MainViewModel : ViewModelBase
     {
         private ObservableCollection<Application> _applications = new ObservableCollection<Application>();
-        private float cpuUsage;
+        private Application _newApp;
+        private float _cpuUsage;
 
         private Timer perfCounter;
 
         private IXMLService xmlService;
 
-        public MainWindowViewModel()
+        public MainViewModel()
         {
             perfCounter = new Timer(UpdatePerfCounters, null, 0, 1000);
             Applications.Add(new Application
@@ -37,11 +42,21 @@ namespace SystemCheckerPlus
 
         public float CPUUsage
         {
-            get { return cpuUsage; }
+            get { return _cpuUsage; }
             set
             {
-                cpuUsage = value;
+                _cpuUsage = value;
                 RaisePropertyChanged("CPUUsage");
+            }
+        }
+
+        public Application NewApp
+        {
+            get { return _newApp; }
+            set 
+            {
+                _newApp = value;
+                RaisePropertyChanged("NewApp");
             }
         }
 

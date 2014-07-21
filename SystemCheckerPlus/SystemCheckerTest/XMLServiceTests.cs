@@ -1,6 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Xml.Linq;
 using SystemCheckerPlus;
+using SystemCheckerPlus.Models;
+using SystemCheckerPlus.Services;
+using SystemCheckerPlus.Services.Interfaces;
 
 namespace SystemCheckerTest
 {
