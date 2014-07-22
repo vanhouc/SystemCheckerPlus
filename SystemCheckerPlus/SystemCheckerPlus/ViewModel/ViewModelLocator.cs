@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SystemCheckerPlus.Services;
+using SystemCheckerPlus.Services.Interfaces;
 
 namespace SystemCheckerPlus.ViewModel
 {
@@ -16,6 +18,13 @@ namespace SystemCheckerPlus.ViewModel
             get
             {
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
+            }
+        }
+        public NewApplicationViewModel EditApplication
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<NewApplicationViewModel>();
             }
         }
         static ViewModelLocator()
@@ -29,7 +38,10 @@ namespace SystemCheckerPlus.ViewModel
             {
 
             }
+            SimpleIoc.Default.Register<IConfigurationService, XMLConfigService>();
+            SimpleIoc.Default.Register<IDialogService, DialogService>();
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<NewApplicationViewModel>();
         }
     }
 }

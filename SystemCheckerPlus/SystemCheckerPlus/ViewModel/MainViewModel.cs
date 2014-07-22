@@ -1,32 +1,33 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using Microsoft.Practices.ServiceLocation;
 using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading;
 using SystemCheckerPlus.Models;
+using SystemCheckerPlus.Models.Interfaces;
 using SystemCheckerPlus.Services;
 using SystemCheckerPlus.Services.Interfaces;
+using SystemCheckerPlus.ViewModel;
+using SystemCheckerPlus.Views;
 
 namespace SystemCheckerPlus
 {
     public class MainViewModel : ViewModelBase
     {
         private ObservableCollection<Application> _applications = new ObservableCollection<Application>();
-        private Application _newApp;
-        private float _cpuUsage;
 
         private Timer perfCounter;
-
-        private IXMLService xmlService;
-
+        private string configPath;
         public MainViewModel()
         {
             perfCounter = new Timer(UpdatePerfCounters, null, 0, 1000);
             Applications.Add(new Application
             {
                 DisplayName = "Total CPU Usage",
-                ProcName = "Total CPU Usage"
+                ProcessName = "Total CPU Usage"
             });
         }
 
@@ -39,70 +40,90 @@ namespace SystemCheckerPlus
                 RaisePropertyChanged("Applications");
             }
         }
+        /// <summary>
+        /// The <see cref="TotalCPUUsage" /> property's name.
+        /// </summary>
+        public const string TotalCPUUsagePropertyName = "TotalCPUUsage";
 
-        public float CPUUsage
+        private float _totalCPUUsage;
+
+        /// <summary>
+        /// Sets and gets the TotalCPUUsage property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public float TotalCPUUsage
         {
-            get { return _cpuUsage; }
+            get
+            {
+                return _totalCPUUsage;
+            }
             set
             {
-                _cpuUsage = value;
-                RaisePropertyChanged("CPUUsage");
+                Set(TotalCPUUsagePropertyName, ref _totalCPUUsage, value);
             }
         }
+        /// <summary>
+        /// The <see cref="AvailableMemory" /> property's name.
+        /// </summary>
+        public const string AvailableMemoryPropertyName = "AvailableMemory";
 
-        public Application NewApp
+        private float _availableMemory = 0;
+
+        /// <summary>
+        /// Sets and gets the AvailableMemory property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public float AvailableMemory
         {
-            get { return _newApp; }
-            set 
+            get
             {
-                _newApp = value;
-                RaisePropertyChanged("NewApp");
+                return _availableMemory;
             }
-        }
-
-        public void InitializeAppData(IXMLService service)
-        {
-            if (service != null)
+            set
             {
-                Applications = new ObservableCollection<Application>(service.GetAppData(new string[] { "Applications", "Application" }));
-            }
-        }
-
-        public void LoadAppData()
-        {
-            OpenFileDialog openVData = new OpenFileDialog();
-            openVData.Filter = "Extensible Markup Language *.xml|*.xml";
-            openVData.ShowDialog();
-            if (openVData.FileName != null && File.Exists(openVData.FileName))
-            {
-                xmlService = new XMLService(new XMLLoader(openVData.FileName));
-                InitializeAppData(xmlService);
+                Set(AvailableMemoryPropertyName, ref _availableMemory, value);
             }
         }
 
         async private void UpdatePerfCounters(object state)
         {
-            ProcessService procService = ProcessService.Instance;
-            CPUUsage = await procService.TotalCPUAsync();
+            TotalCPUUsage = await ProcessService.TotalCPUAsync();
+            AvailableMemory = ProcessService.AvailableMemory();
             if (Applications != null)
             {
                 foreach (Application a in Applications)
                 {
-                    if (a.ProcName != null && a.ProcName != String.Empty)
+                    if (a.ProcessName != null && a.ProcessName != String.Empty)
                     {
-                        if (a.ProcName == "Total CPU Usage")
-                        {
-                            a.ProcUsage = await procService.TotalCPUAsync();
-                            a.MemUsage = procService.AvailableMemory();
-                        }
-                        else
-                        {
-                            a.ProcUsage = await procService.ProcessCPUAsync(a.ProcName);
-                            a.MemUsage = procService.ProcessPrivateMemory(a.ProcName);
-                        }
+                        a.ProcessUsage = await ProcessService.ProcessCPUAsync(a.ProcessName);
+                        a.MemoryUsage = ProcessService.ProcessPrivateMemory(a.ProcessName);
                     }
                 }
             }
+        }
+        private RelayCommand _newAppCommand;
+
+        /// <summary>
+        /// Gets the NewAppCommand.
+        /// </summary>
+        public RelayCommand NewAppCommand
+        {
+            get
+            {
+                return _newAppCommand
+                    ?? (_newAppCommand = new RelayCommand(
+                                          () =>
+                                          {
+                                              var newApp = new EditApplication();
+                                              newApp.DataContext = new NewApplicationViewModel(newApp);
+                                              newApp.Show();
+                                          }));
+            }
+        }
+        public void SaveApplication(IApplication toSave)
+        {
+            var configService = ServiceLocator.Current.GetInstance<IConfigurationService>();
+            configService.SaveApplication(configPath, toSave);
         }
     }
 }
