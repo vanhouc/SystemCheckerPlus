@@ -157,3 +157,4 @@ $RECYCLE.BIN/
 SystemCheckerPlus/VersusData.xml
 /SystemCheckerPlus/packages
 *.etl
+/Checkered/packages
