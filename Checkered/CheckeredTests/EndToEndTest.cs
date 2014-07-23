@@ -30,7 +30,8 @@ namespace CheckeredTests
                 Executable = @"Transaction Engine.exe",
                 Files = new string[]
                     {
-                        @"Data\VIS.config"
+                        @"Data\VIS.config",
+                        @"Data\"
                     }
             };
             concs = new List<IConcentrator>()

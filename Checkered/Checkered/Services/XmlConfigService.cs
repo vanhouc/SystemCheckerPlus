@@ -56,7 +56,28 @@ namespace Checkered.Services
         public void CreateNewConfiguration()
         {
             XDocument doc = new XDocument(
-                new XElement("Configuration"));
+                new XElement("Configuration",
+                    new XElement("FacilityName"),
+                    new XElement("Tech"),
+                    new XElement("Applications",
+                        new XComment(
+                            Environment.NewLine +
+                            new XElement("ExampleApp",
+                                new XElement("Display", "Example Application"),
+                                new XElement("Folder", "C:\\Versus\\ExampleApp\\"),
+                                new XElement("Executable", "example.exe"),
+                                new XElement("Files",
+                                    new XElement("File", "important.ini"),
+                                    new XElement("File", "Stuff\\veryimportant.txt"),
+                                    new XElement("File", "Data\\"))).ToString(SaveOptions.None) +
+                            Environment.NewLine)),
+                    new XElement("Concentrators",
+                        new XComment(
+                            Environment.NewLine +
+                            new XElement("Concentrator", "EXAMPLE-DNSHOST").ToString(SaveOptions.None) +
+                            Environment.NewLine +
+                            new XElement("Concentrator", "127.0.0.1").ToString(SaveOptions.None) +
+                            Environment.NewLine))));
             doc.Save(path);
         }
         public void SetBackupLocation(string backupPath)

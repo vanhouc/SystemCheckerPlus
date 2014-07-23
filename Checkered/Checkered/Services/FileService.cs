@@ -20,7 +20,10 @@ namespace Checkered.Services
                 ZipFile archive = new ZipFile(String.Format("{0}{1}{2}{3}.zip", backupPath, today.Year.ToString(), today.Month.ToString(), today.Day.ToString()));
                 foreach (string file in toBackup.Files)
                 {
-                    archive.AddFile(toBackup.Folder + file);
+                    if (file[file.Length - 1] == '\\')
+                        archive.AddDirectory(toBackup.Folder + file, toBackup.Folder.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries).Last() + "\\" + file);
+                    else
+                        archive.AddFile(toBackup.Folder + file, toBackup.Folder.Split(new char[] {'\\'}, StringSplitOptions.RemoveEmptyEntries).Last() + "\\");
                 }
                 archive.Save();
                 return true;
