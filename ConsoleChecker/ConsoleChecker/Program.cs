@@ -83,11 +83,12 @@ namespace ConsoleChecker
                     if (app.Files.Length > 0)
                     {
                         Console.Write("{0}...", app.DisplayName);
-                        fileService.BackupFiles(app, backupPath);
-                        Console.WriteLine("Done!");
+                        if (fileService.BackupFiles(app, backupPath))
+                            Console.WriteLine("Done!");
+                        else
+                            Console.WriteLine("Failed!");
                     }
                 }
-                Console.WriteLine("Files backed up to {0}", backupPath);
             }
             string savePath = "CheckData.csv";
             bool saved = false;
