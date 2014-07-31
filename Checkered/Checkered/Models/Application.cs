@@ -37,6 +37,7 @@ namespace Checkered.Models
         public string Folder { get; set; }
 
         public float MemoryUsage { get; set; }
+        public string ProcessName { get; set; }
 
         private Queue<float> _processUsage = new Queue<float>();
         public float ProcessUsage
