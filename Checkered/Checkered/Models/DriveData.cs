@@ -11,6 +11,7 @@ namespace Checkered.Models
     {
         public DriveData(string label, long freeSpace, long totalSpace)
         {
+            Label = label;
             FreeSpace = freeSpace;
             TotalSpace = totalSpace;
         }
