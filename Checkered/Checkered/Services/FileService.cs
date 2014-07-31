@@ -35,8 +35,15 @@ namespace Checkered.Services
         }
         public string GetFileVersion(string path)
         {
-            FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(path);
-            return String.Format("{0}.{1}.{2}.{3}", fileVersion.FileMajorPart, fileVersion.FileMinorPart, fileVersion.FileBuildPart, fileVersion.FilePrivatePart);
+            try
+            {
+                FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(path);
+                return String.Format("{0}.{1}.{2}.{3}", fileVersion.FileMajorPart, fileVersion.FileMinorPart, fileVersion.FileBuildPart, fileVersion.FilePrivatePart);
+            }
+            catch
+            {
+                return String.Empty;
+            }
         }
     }
 }

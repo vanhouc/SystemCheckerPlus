@@ -15,24 +15,38 @@ namespace CheckeredTests
         IConfigurationService configService;
         ISaveService saveService;
         IFileService fileService;
-        IApplication testApp;
+        List<IApplication> testApp;
         List<IConcentrator> concs;
         public EndToEndTest()
         {
             configService = new XmlConfigService("C:\\Backup\\E2E.xml");
             saveService = new CsvService();
             fileService = new FileService();
-            testApp = new Application()
+            testApp = new List<IApplication>()
             {
-                DisplayName = "Transaction Engine",
-                FileName = "TransactionEngine",
-                Folder = @"C:\Versus\server32\",
-                Executable = @"Transaction Engine.exe",
-                Files = new string[]
+                new Application()
+                {
+                    DisplayName = "Transaction Engine",
+                    FileName = "TransactionEngine",
+                    Folder = @"C:\Versus\server32\",
+                    Executable = @"Transaction Engine.exe",
+                    Files = new string[]
+                        {
+                            @"Data\VIS.config",
+                            @"Data\"
+                        }
+                },
+                new Application()
+                {
+                    DisplayName = "Reports Plus",
+                    FileName = "ReportsPlus",
+                    Folder = @"C:\Versus\ReportsPlus\",
+                    Executable = "TracklogBuilder.exe",
+                    Files = new string[]
                     {
-                        @"Data\VIS.config",
-                        @"Data\"
+                        @"TracklogBuilder.ini"
                     }
+                }
             };
             concs = new List<IConcentrator>()
             {
@@ -45,16 +59,20 @@ namespace CheckeredTests
         public void CreateAndPopulateConfig()
         {
             configService.CreateNewConfiguration();
-            configService.SaveApplication(testApp);
+            testApp.ForEach(a => configService.SaveApplication(a));
             configService.SetConcentrators(concs);
             configService.SetBackupLocation(@"C:\Backup\");
             configService.SetFacilityName("Test Facility");
             configService.Tech = "Cameron VanHouzen";
             for (int i = 0; i < 5; i++)
                 concs.ForEach(c => c.UpdatePing(3));
-            testApp.Version = fileService.GetFileVersion(testApp.Folder + testApp.Executable);
-            fileService.BackupFiles(testApp, configService.GetBackupLocation());
-            testApp.MemoryUsage = ProcessService.ProcessPrivateMemory(new string(testApp.Executable.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries).Last().TakeWhile(c => c != '.').ToArray()));
+            testApp.ForEach(a => a.Version = fileService.GetFileVersion(a.Folder + a.Executable));
+            testApp.ForEach(a => fileService.BackupFiles(a, configService.GetBackupLocation()));
+            testApp.ForEach(
+                a => a.MemoryUsage = ProcessService.ProcessPrivateMemory(
+                new string(a.Executable.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Last()
+                    .TakeWhile(c => c != '.').ToArray())));
             IEnumerable<IDriveData> drives = DriveService.GetDrives();
             bool saved = false;
             int attempts = 0;
@@ -62,7 +80,17 @@ namespace CheckeredTests
             while (!saved && attempts < 5)
             {
                 attempts++;
-                saved = saveService.SaveData(savePath, configService.GetFacilityName(), configService.Tech, DateTime.Today, drives, ProcessService.TotalCPU(), ProcessService.ProcessCount(), ProcessService.AvailableMemory(), new List<IApplication>() { testApp }, concs);
+                saved = saveService.SaveData(
+                    savePath,
+                    configService.GetFacilityName(),
+                    configService.Tech,
+                    DateTime.Today,
+                    drives,
+                    ProcessService.TotalCPU(),
+                    ProcessService.ProcessCount(),
+                    ProcessService.AvailableMemory(),
+                    testApp,
+                    concs);
                 if (!saved)
                     savePath = String.Format("C:\\Backup\\TestOutput({0}).csv", attempts);
             }

@@ -158,3 +158,4 @@ SystemCheckerPlus/VersusData.xml
 /SystemCheckerPlus/packages
 *.etl
 /Checkered/packages
+/ConsoleChecker/packages

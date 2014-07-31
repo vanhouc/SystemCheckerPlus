@@ -10,10 +10,14 @@ namespace Checkered.Models
     {
         public Application()
         {
-            DisplayName = "Test Application";
-            ProcessName = String.Empty;
+            DisplayName = "Application";
             Files = new string[0];
             Folder = String.Empty;
+            Version = String.Empty;
+            MemoryUsage = 0;
+            ProcessUsage = 0;
+            Executable = String.Empty;
+            FileName = "Application";
         }
 
         public Application(string displayName)
@@ -34,7 +38,6 @@ namespace Checkered.Models
 
         public float MemoryUsage { get; set; }
 
-        public string ProcessName { get; set; }
         private Queue<float> _processUsage = new Queue<float>();
         public float ProcessUsage
         {

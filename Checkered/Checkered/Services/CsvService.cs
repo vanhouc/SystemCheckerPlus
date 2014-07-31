@@ -28,10 +28,8 @@ namespace Checkered.Services
             using (StreamWriter sw = File.CreateText(path))
             {
                 //Performance Section
-                sw.WriteLine("Facility: {0},Tech: {1},Date: {2}",
-                    facilityName,
-                    tech,
-                    date.ToShortDateString());
+                sw.WriteLine("{0},Current,{1}", facilityName, date.ToShortDateString());
+                sw.WriteLine("Tech: {0},Score,Versus is on C:", tech);
                 sw.WriteLine("Performance Section,Score,Data");
                 sw.WriteLine("CPU Performance(AUTOMATED),{0},{1}%",
                     ScoreCPUUsage(totalCPU),
@@ -41,7 +39,7 @@ namespace Checkered.Services
                 sw.WriteLine("Number of Processes(AUTOMATED),N/A,{0}",
                     processCount);
                 foreach (IDriveData drive in driveData)
-                    sw.WriteLine("Hard Drive Space (Free/Total) {0},{1},{2}GB/{3}GB",
+                    sw.WriteLine("Hard Drive Space {0} (Free/Total) {0},{1},{2}GB/{3}GB",
                         drive.Label,
                         (100 * (Convert.ToDouble(drive.FreeSpace) / Convert.ToDouble(drive.TotalSpace))).ToString("F0"),
                         (drive.FreeSpace / (Math.Pow(1024, 3))).ToString("F0"),
@@ -49,15 +47,13 @@ namespace Checkered.Services
                 sw.WriteLine("Core Software Version Verification,N/A,N/A");
                 sw.WriteLine("Versus Log File Maintainance,N/A,N/A");
                 sw.WriteLine("Versus Config Database Backups,N/A,N/A");
-                sw.WriteLine(",,");
                 //Backup Section
-                sw.WriteLine("Backup Section,Empty,Backed-Up");
-                foreach (string file in applications.SelectMany(a => a.Files))
+                sw.WriteLine("Backup Section,,Backed-Up");
+                foreach (string file in applications.Where(a => a.Version != String.Empty).SelectMany(a => a.Files))
                     sw.WriteLine("{0},,x", file);
-                sw.WriteLine(",,");
                 //Installed Software Section
                 sw.WriteLine("Installed Software Section/Version,Score,Proc/Memory");
-                foreach (IApplication app in applications)
+                foreach (IApplication app in applications.Where(a => a.Version != String.Empty))
                     sw.WriteLine("{0} {1},{2},{3}/{4}Kb",
                         new string(app.Executable.TakeWhile(c => c != '.').ToArray()), //0
                         app.Version, //1
@@ -65,7 +61,6 @@ namespace Checkered.Services
                         (app.ProcessUsage > 0 ? app.ProcessUsage / 100 : 0).ToString("P"), //3
                         (app.MemoryUsage > 0 ? app.MemoryUsage / 1024 : 0).ToString()); //4
 
-                sw.WriteLine(",,");
                 //Versus System Health Section
                 sw.WriteLine("Versus System Health, Score, Data");
                 sw.WriteLine("Low Battery Report(# Badges),,");
@@ -74,7 +69,6 @@ namespace Checkered.Services
                 sw.WriteLine("Number Deleted Names,,");
                 sw.WriteLine("Sensor Tester Results,,");
                 sw.WriteLine("Collectors Not Reporting Data,,");
-                sw.WriteLine(",,");
                 //Concentrator Tests Section
                 sw.WriteLine("Concentrator Tests,Score,Data");
                 sw.WriteLine("Concentrator Ping Test Results,N/A,{0}ms",
