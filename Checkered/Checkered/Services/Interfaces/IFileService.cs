@@ -8,7 +8,7 @@ namespace Checkered.Services.Interfaces
 {
     public interface IFileService
     {
-        bool BackupFiles(IApplication toBackup, string backupPath);
+        void BackupFiles(IApplication toBackup, string backupPath);
         string GetFileVersion(string path);
     }
 }
