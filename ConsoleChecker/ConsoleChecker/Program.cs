@@ -6,6 +6,7 @@ using System.Text;
 using Checkered.Services.Interfaces;
 using Checkered.Services;
 using Checkered.Models.Interfaces;
+using System.Diagnostics;
 
 namespace ConsoleChecker
 {
@@ -40,6 +41,7 @@ namespace ConsoleChecker
             {
                 Console.WriteLine("No config file found!");
                 Console.Write("Generating template now...");
+                
                 configService.CreateNewConfiguration();
                 Console.WriteLine("Successfully created new config file.");
                 Console.WriteLine("Press any key to exit...");
@@ -58,11 +60,14 @@ namespace ConsoleChecker
                 foreach (IApplication app in apps)
                 {
                     string processName = new string(app.Executable.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries).Last().TakeWhile(c => c != '.').ToArray());
-                    Console.Write(processName + "...");
-                    app.ProcessUsage = ProcessService.ProcessCPU(processName);
-                    app.MemoryUsage = ProcessService.ProcessPrivateMemory(processName);
-                    app.Version = fileService.GetFileVersion(app.Folder + app.Executable);
-                    Console.WriteLine("Done!");
+                    if (Process.GetProcessesByName(processName).Length == 1)
+                    {
+                        Console.Write(processName + "...");
+                        app.ProcessUsage = ProcessService.ProcessCPU(processName);
+                        app.MemoryUsage = ProcessService.ProcessPrivateMemory(processName);
+                        app.Version = fileService.GetFileVersion(app.Folder + app.Executable);
+                        Console.WriteLine("Done!");
+                    }
                 }
             }
             if (concs.Count > 0)
@@ -83,10 +88,19 @@ namespace ConsoleChecker
                     if (app.Files.Length > 0)
                     {
                         Console.Write("{0}...", app.DisplayName);
-                        if (fileService.BackupFiles(app, backupPath))
+                        try
+                        {
+                            fileService.BackupFiles(app, backupPath);
                             Console.WriteLine("Done!");
-                        else
-                            Console.WriteLine("Failed!");
+                        }
+                        catch(Exception ex)
+                        {
+                            Console.Write(ex.Message);
+                            if (ex.InnerException != null)
+                                Console.WriteLine(ex.InnerException.Message);
+                            else
+                                Console.WriteLine();
+                        }
                     }
                 }
             }
