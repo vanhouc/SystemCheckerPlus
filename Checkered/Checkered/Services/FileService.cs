@@ -3,32 +3,34 @@ using Checkered.Services.Interfaces;
 using Ionic.Zip;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace Checkered.Services
 {
     public class FileService : IFileService
     {
-        public bool BackupFiles(IApplication toBackup, string backupPath)
+        public void BackupFiles(IApplication toBackup, string backupPath)
         {
-            try
+            DateTime today = DateTime.Today;
+            ZipFile archive;
+            string zipPath = String.Format("{0}{1}{2}{3}.zip", backupPath, today.Year.ToString(), today.Month.ToString(), today.Day.ToString());
+            if (File.Exists(zipPath))
             {
-                DateTime today = DateTime.Today;
-                ZipFile archive = new ZipFile(String.Format("{0}{1}{2}{3}.zip", backupPath, today.Year.ToString(), today.Month.ToString(), today.Day.ToString()));
-                foreach (string file in toBackup.Files)
-                {
-                    if (file[file.Length - 1] == '\\')
-                        archive.AddDirectory(toBackup.Folder + file, toBackup.Folder.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries).Last() + "\\" + file);
-                    else
-                        archive.AddFile(toBackup.Folder + file, toBackup.Folder.Split(new char[] {'\\'}, StringSplitOptions.RemoveEmptyEntries).Last() + "\\");
-                }
-                archive.Save();
-                return true;
+                archive = ZipFile.Read(zipPath);
             }
-            catch
+            else
             {
-                return false;
+                archive = new ZipFile(String.Format("{0}{1}{2}{3}.zip", backupPath, today.Year.ToString(), today.Month.ToString(), today.Day.ToString()));
             }
+            foreach (string file in toBackup.Files)
+            {
+                if (file[file.Length - 1] == '\\')
+                    archive.AddDirectory(toBackup.Folder + file, toBackup.Folder.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries).Last() + "\\" + file);
+                else
+                    archive.AddFile(toBackup.Folder + file, toBackup.Folder.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries).Last() + "\\");
+            }
+            archive.Save();
         }
         public string GetFileVersion(string path)
         {
